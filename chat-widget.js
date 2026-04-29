@@ -6,13 +6,8 @@ class KnowledgeWidget {
   }
   
   init() {
-    // Создаём кнопку чата
-    const btn = document.createElement('button');
-    btn.innerHTML = '💬 Помощь';
-    btn.style.cssText = 'position:fixed;bottom:20px;right:20px;z-index:9999;padding:12px 20px;background:#007bff;color:white;border:none;border-radius:25px;cursor:pointer;';
-    btn.onclick = () => this.toggleChat();
-    document.body.appendChild(btn);
-  }
+  // Кнопка не создаётся - чат открывается через кнопку на сайте
+}
   
   toggleChat() {
     if (document.getElementById('kb-chat')) {
