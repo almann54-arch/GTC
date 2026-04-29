@@ -60,5 +60,5 @@ class KnowledgeWidget {
 
 // Инициализация (замените URL на ваш webhook)
 document.addEventListener('DOMContentLoaded', () => {
-  new KnowledgeWidget('https://ВАШ-n8n-сервер/webhook/kb');
+  new KnowledgeWidget('https://n8n-alex.loca.lt/webhook/kb');
 });
