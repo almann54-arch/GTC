@@ -6,8 +6,8 @@ class KnowledgeWidget {
   }
   
   init() {
-  // Кнопка не создаётся - чат открывается через кнопку на сайте
-}
+    // Кнопка убрана - чат открывается через кнопку на сайте
+  }
   
   toggleChat() {
     if (document.getElementById('kb-chat')) {
@@ -18,6 +18,7 @@ class KnowledgeWidget {
     const chat = document.createElement('div');
     chat.id = 'kb-chat';
     chat.style.cssText = 'position:fixed;bottom:70px;right:20px;width:320px;height:400px;background:white;border:1px solid #ddd;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,0.15);display:flex;flex-direction:column;z-index:9999;';
+    
     chat.innerHTML = `
       <div style="padding:12px;background:#007bff;color:white;border-radius:10px 10px 0 0;font-weight:bold;">Помощник</div>
       <div id="kb-messages" style="flex:1;padding:12px;overflow-y:auto;font-size:14px;"></div>
@@ -38,11 +39,9 @@ class KnowledgeWidget {
     const question = input.value.trim();
     if (!question) return;
     
-    // Показываем вопрос
     messages.innerHTML += `<div style="text-align:right;margin:4px 0;"><strong>Вы:</strong> ${question}</div>`;
     input.value = '';
     
-    // Отправляем в n8n
     try {
       const response = await fetch(this.webhookUrl, {
         method: 'POST',
@@ -58,7 +57,7 @@ class KnowledgeWidget {
   }
 }
 
-// Инициализация (замените URL на ваш webhook)
+// Инициализация
 document.addEventListener('DOMContentLoaded', () => {
   new KnowledgeWidget('https://n8n-alex.loca.lt/webhook/kb');
 });
