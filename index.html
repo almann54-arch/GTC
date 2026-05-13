@@ -184,47 +184,32 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ chatInput: text, sessionId })
-        });
-        const data = await res.json();
-        hideTyping();
-        // Поддержка разных форматов ответа n8n
-        const reply = data.output || data.text || data.message || JSON.stringify(data);
-        addMessage(reply, 'ai');
-      } catch (err) {
-        hideTyping();
-        addMessage('⚠️ Ошибка соединения. Попробуйте позже или оставьте заявку ниже.', 'ai');
+      });
+      
+      // Читаем ответ от n8n как обычный текст
+      const aiResponseText = await res.text();
+      hideTyping();
+
+      if (aiResponseText.trim()) {
+        addMessage(aiResponseText, 'ai');
+      } else {
+        addMessage("Сервер прислал пустой ответ.", 'ai');
       }
+
+    } catch (error) {
+      hideTyping();
+      addMessage("Ошибка связи с сервером.", 'ai');
+      console.error(error);
     }
+  }
 
-    sendBtn.addEventListener('click', sendChat);
-    chatInput.addEventListener('keypress', (e) => e.key === 'Enter' && sendChat());
+  // Привязываем функцию к кнопкам
+  sendBtn.addEventListener('click', sendChat);
+  chatInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') sendChat();
+  });
+</script>
 
-    // Fallback Form
-    const form = document.getElementById('fallbackForm');
-    const formStatus = document.getElementById('formStatus');
-
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const formData = new FormData(form);
-      const data = Object.fromEntries(formData);
-      formStatus.textContent = 'Отправка...';
-      formStatus.className = 'status-msg';
-
-      try {
-        await fetch(FALLBACK_WEBHOOK, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        });
-        formStatus.textContent = '✅ Заявка отправлена! Мы свяжемся с вами в течение 24 часов.';
-        formStatus.className = 'status-msg success';
-        form.reset();
-      } catch (err) {
-        formStatus.textContent = '❌ Ошибка отправки. Попробуйте позже.';
-        formStatus.className = 'status-msg error';
-      }
-    });
-  </script>
 <script src="chat-widget.js"></script>
 </body>
 </html>
