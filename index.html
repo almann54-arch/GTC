@@ -179,11 +179,12 @@
       chatInput.value = '';
       showTyping();
 
-      try {
-        const res = await fetch(CHAT_WEBHOOK, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ chatInput: text, sessionId })
+         try {
+      // Собираем ссылку: берем базовый адрес и добавляем к нему текст через знак вопроса
+      const urlWithParams = `${CHAT_WEBHOOK}?chatInput=${encodeURIComponent(text)}`;
+      
+      const res = await fetch(urlWithParams, {
+        method: 'GET'
       });
       
       // Читаем ответ от n8n как обычный текст
