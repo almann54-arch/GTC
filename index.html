@@ -183,19 +183,14 @@
       // Собираем ссылку: берем базовый адрес и добавляем к нему текст через знак вопроса
       const urlWithParams = `${CHAT_WEBHOOK}?chatInput=${encodeURIComponent(text)}`;
       
+      // Добавляем режим no-cors, чтобы обойти блокировку браузера
       const res = await fetch(urlWithParams, {
-        method: 'GET'
+        method: 'GET',
+        mode: 'no-cors'
       });
       
-      // Читаем ответ от n8n как обычный текст
-      const aiResponseText = await res.text();
       hideTyping();
-
-      if (aiResponseText.trim()) {
-        addMessage(aiResponseText, 'ai');
-      } else {
-        addMessage("Сервер прислал пустой ответ.", 'ai');
-      }
+      addMessage("Запрос отправлен ассистенту...", 'ai');
 
     } catch (error) {
       hideTyping();
